@@ -8,13 +8,13 @@ export default {
       city: '',
       province: '',
       country: '',
+      apiKey: import.meta.env.VITE_APP_LOCATION_API,
     }
   },
   methods: {
     getLocation(event) {
       event.preventDefault()
       navigator.geolocation.getCurrentPosition((position)=> {
-      console.log(position.coords.latitude, position.coords.longitude)
       this.latitude = position.coords.latitude
       this.longitude = position.coords.longitude
       fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&apiKey=${this.apiKey}`)
