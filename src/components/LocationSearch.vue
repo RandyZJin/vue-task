@@ -8,7 +8,7 @@ export default {
       apiKey: import.meta.env.VITE_APP_LOCATION_API,
       currentMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-1.989935,52.518458&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
       defaultMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-1.989935,52.518458&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
-      searchedLocations: [],
+      searchedLocations: {},
     }
   },
   methods: {
@@ -24,7 +24,7 @@ export default {
           this.list++
           this.currentMap = `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:${point.lon},${point.lat}&zoom=5.6&marker=lonlat:${point.lon},${point.lat};color:%23ff0000;size:medium&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`
           console.log(this.currentMap)
-          this.searchedLocations.push(this.list + ") " + point.address_line1 + ", " + point.address_line2)
+          this.searchedLocations[this.location] = point.address_line1 + ", " + point.address_line2
         })
     },
   },
