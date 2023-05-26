@@ -8,7 +8,8 @@ export default {
       apiKey: import.meta.env.VITE_APP_LOCATION_API,
       currentMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-1.989935,52.518458&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
       defaultMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-1.989935,52.518458&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
-      searchedLocations: {},
+      searchedLocations: [{ "query": "o.co coliseum", "longitude": -113.45838, "latitude": 53.570676 },  { "query": "hawthorns", "longitude": -9.16483646954769, "latitude": 54.1274345 }],
+      checkedLocations: [],
     }
   },
   methods: {
@@ -24,7 +25,11 @@ export default {
           this.list++
           this.currentMap = `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:${point.lon},${point.lat}&zoom=5.6&marker=lonlat:${point.lon},${point.lat};color:%23ff0000;size:medium&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`
           console.log(this.currentMap)
-          this.searchedLocations[this.location] = point.address_line1 + ", " + point.address_line2
+          // this.searchedLocations[this.location] = point.address_line1 + ", " + point.address_line2
+          if (this.searchedLocations.length = 10) {
+            this.searchedLocations.pop()
+          }
+          this.searchedLocations.push({ query: this.location, longitude: point.lon, latitude: point.lat })
         })
     },
   },
@@ -34,17 +39,25 @@ export default {
 
 <template>
   <!-- <p>Location is: {{ location }}</p> -->
-  <div>
+  <!-- <div>
 
     <form @submit.prevent="submit">
       <input v-model="location" placeholder="put a location here" />
       <button type="submit">Search</button>
     </form>
-      <img :src="currentMap" alt="Dynamic Image">
-  </div>
+    <img :src="currentMap" alt="Dynamic Image">
+  </div> -->
   <div>
     {{ searchedLocations }}
   </div>
+
+  <div>Checked names: {{ checkedLocations }}</div>
+  <ul>
+    <li v-for="location in searchedLocations">
+      <input type="checkbox" id=${location.query} value={{location.query}} v-model="checkedLocations">
+      <label for={{location.query}}>{{location.query}}</label>
+    </li>
+  </ul>
 </template>
 
 <style scoped>
