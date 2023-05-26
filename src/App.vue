@@ -2,11 +2,13 @@
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 import Location from './components/Location.vue'
+import LocationSearch from './components/LocationSearch.vue'
 </script>
 
 <template>
   <main>
-    <Location />
+    <!-- <Location /> -->
+    <LocationSearch />
   </main>
 </template>
 
