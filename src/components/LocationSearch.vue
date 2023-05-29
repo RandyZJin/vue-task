@@ -4,17 +4,16 @@ export default {
     return {
       location: '',
       map: null,
-      list: 0,
+      // list: 0,
       apiKey: import.meta.env.VITE_APP_LOCATION_API,
       currentMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-1.989935,52.518458&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
-      defaultMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-1.989935,52.518458&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
-      searchedLocations: [{ "query": "o.co coliseum", "longitude": -113.45838, "latitude": 53.570676 },  { "query": "hawthorns", "longitude": -9.16483646954769, "latitude": 54.1274345 }],
-      checkedLocations: [],
+      searchedLocations: [],
+      // searchedLocations: [{ query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676 }, { query: "hawthorns", longitude: -9.16483646954769, latitude: 54.1274345 }],
     }
   },
   methods: {
     submit(event) {
-      // event.preventDefault()
+      event.preventDefault()
       console.log(this.location)
       fetch(`https://api.geoapify.com/v1/geocode/search?text=${this.location}&format=json&apiKey=${this.apiKey}`)
         .then(response => response.json())
@@ -22,16 +21,48 @@ export default {
           console.log(result.results[0])
           const point = result.results[0]
           console.log(point.lat, point.lon)
-          this.list++
-          this.currentMap = `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:${point.lon},${point.lat}&zoom=5.6&marker=lonlat:${point.lon},${point.lat};color:%23ff0000;size:medium&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`
-          console.log(this.currentMap)
+          // this.list++
+          // this.currentMap = `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:${point.lon},${point.lat}&zoom=5.6&marker=lonlat:${point.lon},${point.lat};color:%23ff0000;size:medium&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`
+          // console.log(this.currentMap)
           // this.searchedLocations[this.location] = point.address_line1 + ", " + point.address_line2
-          if (this.searchedLocations.length = 10) {
-            this.searchedLocations.pop()
-          }
-          this.searchedLocations.push({ query: this.location, longitude: point.lon, latitude: point.lat })
+          // if (this.searchedLocations.length = 10) {
+          //   this.searchedLocations.pop()
+          // }
+          let newSearchEntry = { query: this.location, longitude: point.lon, latitude: point.lat }
+          this.searchedLocations.push(newSearchEntry)
+          console.log("line 32")
+          console.log(newSearchEntry)
+          console.log(this.searchedLocations)
+          // this.updateMap()
         })
     },
+    removeLocation(id) {
+      const index = this.searchedLocations.findIndex(location => location.id === id);
+      if (index !== -1) {
+        this.searchedLocations.splice(index, 1);
+      }
+      this.updateMap()
+    },
+    removeSelectedLocations() {
+      this.searchedLocations = this.searchedLocations.filter(location => !location.selected);
+      this.updateMap()
+    },
+    updateMap() {
+      //this.currentMap = `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:${point.lon},${point.lat}&zoom=5.6&marker=lonlat:${point.lon},${point.lat};color:%23ff0000;size:medium&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`
+      let baseQuery = `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:`
+      if (this.searchedLocations.length > 0) {
+        baseQuery += `${this.searchedLocations[0].longitude},${this.searchedLocations[0].latitude}&zoom=5.6&marker=lonlat:${this.searchedLocations[0].longitude},${this.searchedLocations[0].latitude};color:%23ff0000;size:medium`
+      }
+      if (this.searchedLocations.length > 1) {
+        for (let index = 1; index < this.searchedLocations.length; index++) {
+          baseQuery += `|lonlat:${this.searchedLocations[i].longitude},${this.searchedLocations[i].latitude};color:%23ff0000;size:medium`
+        }
+      }
+      baseQuery += `&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`
+      this.currentMap = baseQuery
+
+    }
+
   },
 
 }
@@ -39,25 +70,49 @@ export default {
 
 <template>
   <!-- <p>Location is: {{ location }}</p> -->
-  <!-- <div>
+  <div>
 
     <form @submit.prevent="submit">
       <input v-model="location" placeholder="put a location here" />
       <button type="submit">Search</button>
     </form>
     <img :src="currentMap" alt="Dynamic Image">
-  </div> -->
+  </div>
   <div>
     {{ searchedLocations }}
+    {{ searchedLocations.length }}
   </div>
 
-  <div>Checked names: {{ checkedLocations }}</div>
-  <ul>
-    <li v-for="location in searchedLocations">
-      <input type="checkbox" id=${location.query} value={{location.query}} v-model="checkedLocations">
-      <label for={{location.query}}>{{location.query}}</label>
+  <!-- <ul>
+    <li v-for="location of searchedLocations">
+      <input type="checkbox" id=${location.query} value=location.query v-model="checkedLocations">
+      <label for=location.query>{{location.query}}</label>
     </li>
-  </ul>
+  </ul> -->
+  <!-- <ul>
+    <li v-for="location of searchedLocations">
+      {{location.query}}
+    </li>
+  </ul> -->
+  <ol>
+    <table v-for="location of searchedLocations" :key="location.id">
+      <tr>
+        <li>
+          <label>
+            <input type="checkbox" v-model="location.selected">
+            <td>
+              {{ location.query }}
+            </td>
+            <td>
+              {{ location.latitude }} , {{ location.longitude }}
+            </td>
+          </label>
+          <button @click="removeLocation(location.id)">Remove</button>
+        </li>
+      </tr>
+    </table>
+  </ol>
+  <button @click="removeSelectedLocations">Remove Selected</button>
 </template>
 
 <style scoped>
