@@ -28,12 +28,12 @@ export default {
           // if (this.searchedLocations.length = 10) {
           //   this.searchedLocations.pop()
           // }
-          let newSearchEntry = { query: this.location, longitude: point.lon, latitude: point.lat }
+          let newSearchEntry = { query: this.location, longitude: point.lon, latitude: point.lat, id: this.searchedLocations.length + 1 }
           this.searchedLocations.push(newSearchEntry)
           console.log("line 32")
           console.log(newSearchEntry)
           console.log(this.searchedLocations)
-          // this.updateMap()
+          this.updateMap()
         })
     },
     removeLocation(id) {
@@ -55,7 +55,7 @@ export default {
       }
       if (this.searchedLocations.length > 1) {
         for (let index = 1; index < this.searchedLocations.length; index++) {
-          baseQuery += `|lonlat:${this.searchedLocations[i].longitude},${this.searchedLocations[i].latitude};color:%23ff0000;size:medium`
+          baseQuery += `|lonlat:${this.searchedLocations[index].longitude},${this.searchedLocations[index].latitude};color:%23ff0000;size:medium`
         }
       }
       baseQuery += `&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`
@@ -97,9 +97,12 @@ export default {
   <ol>
     <table v-for="location of searchedLocations" :key="location.id">
       <tr>
-        <li>
+        <ul>
           <label>
             <input type="checkbox" v-model="location.selected">
+            <td>
+              {{ location.id }}
+            </td>
             <td>
               {{ location.query }}
             </td>
@@ -108,7 +111,7 @@ export default {
             </td>
           </label>
           <button @click="removeLocation(location.id)">Remove</button>
-        </li>
+        </ul>
       </tr>
     </table>
   </ol>
