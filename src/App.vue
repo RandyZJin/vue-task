@@ -14,10 +14,4 @@ import LocationSearch from './components/LocationSearch.vue'
 header {
   line-height: 1.5;
 }
-
-template {
-  display: flex;
-  flex-direction: column;
-}
-
 </style>

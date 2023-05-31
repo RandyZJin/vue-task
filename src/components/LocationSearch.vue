@@ -2,13 +2,13 @@
 export default {
   data() {
     return {
+      errorMessage: '',
       location: '',
-      map: null,
       currentPage: 1,
       recordsPerPage: 10,
       id_serial: 1,
       apiKey: import.meta.env.VITE_APP_LOCATION_API,
-      currentMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-1.989935,52.518458&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
+      currentMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-79.38495587983707,43.69655543217225&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
       searchedLocations: [],
     }
   },
@@ -25,14 +25,21 @@ export default {
   methods: {
     submit(event) {
       event.preventDefault()
+      this.errorMessage = ""
       fetch(`https://api.geoapify.com/v1/geocode/search?text=${this.location}&format=json&apiKey=${this.apiKey}`)
         .then(response => response.json())
         .then(result => {
-          const point = result.results[0]
-          let newSearchEntry = { query: this.location, longitude: point.lon, latitude: point.lat, id: this.id_serial, timezone: point.timezone.offset_DST }
-          this.id_serial ++
-          this.searchedLocations.push(newSearchEntry)
-          this.updateMap()
+          console.log(result)
+          if (result.results.length === 0) {
+            console.log("results not found")
+            this.errorMessage = "We did not find a result.  Please refine your search terms."
+          } else {
+            const point = result.results[0]
+            let newSearchEntry = { query: this.location, longitude: point.lon, latitude: point.lat, id: this.id_serial, timezone: point.timezone.offset_DST }
+            this.id_serial++
+            this.searchedLocations.push(newSearchEntry)
+            this.updateMap()
+          }
         })
     },
     removeLocation(id) {
@@ -59,7 +66,6 @@ export default {
       }
       baseQuery += `&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`
       this.currentMap = baseQuery
-
     },
 
     goToPreviousPage() {
@@ -86,18 +92,28 @@ export default {
     getGoogleMapsLink(term) {
       return `<a href="https://maps.google.com/?q=${term}" target="_blank"> See in Google Maps </a>`
     },
+
+    showError() {
+      if (this.errorMessage) {
+        return this.errorMessage
+      }
+    }
   },
 
 }
 </script>
 
 <template>
-  <div >
+  <div>
     <div id="location-module">
+
       <form @submit.prevent="submit">
         <input v-model="location" placeholder="put a location here" />
         <button type="submit">Search For Location</button>
       </form>
+      <div class="error-message">
+        {{ showError() }}
+      </div>
       <img :src="currentMap" alt="Map">
     </div>
 
@@ -155,9 +171,8 @@ export default {
   justify-self: center;
 }
 
-
-#my-map {
-  height: 400px;
+.error-message {
+  color: red;
 }
 
 #table-container {
@@ -168,10 +183,8 @@ export default {
 #table-container td,
 th {
   overflow-y: auto;
-  border: cornflowerblue;
   border: 1px solid black;
 }
-
 
 #pagination-container {
   text-align: center;
