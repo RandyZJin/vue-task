@@ -1,14 +1,8 @@
 # vue-task
 
-This template should help get you started developing with Vue 3 in Vite.
+This repo allows a user to acquire their current location, search locations on a map (indicated by a marker), and see a search history in a paged table.
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+This project requires a key from geoapify API (signups are free).
 
 ## Project Setup
 

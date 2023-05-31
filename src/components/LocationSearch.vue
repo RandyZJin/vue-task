@@ -6,12 +6,11 @@ export default {
       map: null,
       currentPage: 1,
       recordsPerPage: 10,
-      // list: 0,
       apiKey: import.meta.env.VITE_APP_LOCATION_API,
       // currentMap: `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-1.989935,52.518458&zoom=5.6&apiKey=${import.meta.env.VITE_APP_LOCATION_API}`,
-      // searchedLocations: [],
-      // searchedLocations: [{ query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676 }, { query: "hawthorns", longitude: -9.16483646954769, latitude: 54.1274345 }],
-      searchedLocations: [{ query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 1, timezone: "-07:00" }, { query: "hawthorns", longitude: -9.16483646954769, latitude: 54.1274345, id: 2, timezone: "+01:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 3, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 4, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 5, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 6, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 7, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 8, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 9, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 10, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 11, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 12, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 13, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 14, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 15, timezone: "-07:00" }],
+      searchedLocations: [],
+      // searchedLocations: [{ query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 1, timezone: "-07:00" }, { query: "hawthorns", longitude: -9.16483646954769, latitude: 54.1274345, id: 2, timezone: "+01:00" }],
+      // searchedLocations: [{ query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 1, timezone: "-07:00" }, { query: "hawthorns", longitude: -9.16483646954769, latitude: 54.1274345, id: 2, timezone: "+01:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 3, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 4, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 5, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 6, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 7, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 8, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 9, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 10, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 11, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 12, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 13, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 14, timezone: "-07:00" }, { query: "o.co coliseum", longitude: -113.45838, latitude: 53.570676, id: 15, timezone: "-07:00" }],
 
     }
   },
@@ -105,7 +104,6 @@ export default {
 </script>
 
 <template>
-  <!-- <p>Location is: {{ location }}</p> -->
   <div>
 
     <form @submit.prevent="submit">
@@ -171,27 +169,6 @@ export default {
     </div>
   </div>
   <!-- {{ displayedData }} -->
-  <!-- <ol>
-    <table v-for="location of searchedLocations" :key="location.id">
-      <tr>
-        <ul>
-          <label>
-            <input type="checkbox" v-model="location.selected">
-            <td>
-              {{ location.id }}
-            </td>
-            <td>
-              {{ location.query }}
-            </td>
-            <td>
-              {{ location.latitude }} , {{ location.longitude }}
-            </td>
-          </label>
-          <button @click="removeLocation(location.id)">Remove</button>
-        </ul>
-      </tr>
-    </table>
-  </ol> -->
 
   <div id="pagination-container">
     <button id="prev-btn" @click="goToPreviousPage" :disabled="currentPage === 1">Previous</button>
@@ -201,27 +178,7 @@ export default {
 </template>
 
 <style scoped>
-/* @import '~maplibre-gl/dist/maplibre-gl.css'; */
 
-.map-wrap {
-  position: relative;
-  width: 100%;
-  height: calc(100vh - 77px);
-  /* calculate height of the screen minus the heading */
-}
-
-.map {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.watermark {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-  z-index: 999;
-}
 
 #my-map {
   height: 400px;
