@@ -20,7 +20,6 @@ export default {
         fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&apiKey=${this.apiKey}`)
           .then(response => response.json())
           .then(result => {
-            console.log(result.results[0])
             const { city, state, country } = result.results[0]
             this.city = city
             this.province = state
@@ -30,9 +29,9 @@ export default {
     },
     showLocation() {
       if (this.city && this.province) {
-        return `Your location is: ${ this.city }, ${ this.province }`
+        return `Your location is: ${ this.city }, ${ this.province }, ${ this.country }`
       } else {
-        return `Please press the button above to get your location`
+        return ""
       }
     }
   }
