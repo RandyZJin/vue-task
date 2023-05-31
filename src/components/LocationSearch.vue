@@ -29,9 +29,7 @@ export default {
       fetch(`https://api.geoapify.com/v1/geocode/search?text=${this.location}&format=json&apiKey=${this.apiKey}`)
         .then(response => response.json())
         .then(result => {
-          console.log(result)
           if (result.results.length === 0) {
-            console.log("results not found")
             this.errorMessage = "We did not find a result.  Please refine your search terms."
           } else {
             const point = result.results[0]
@@ -97,7 +95,9 @@ export default {
       if (this.errorMessage) {
         return this.errorMessage
       }
-    }
+    },
+
+
   },
 
 }

@@ -8,6 +8,12 @@ The location search is powered by static images from Geoapify using the coordina
 
 This project requires a key from Geoapify API (the free plan will be sufficient for the usage of this project).
 
+## Preview
+
+!["screenshot of singular search"](https://github.com/RandyZJin/vue-task/blob/master/docs/Search1.JPG)
+!["screenshot of multiple searches"](https://github.com/RandyZJin/vue-task/blob/master/docs/Search2.JPG)
+
+
 ## Project Setup
 
 ```sh
