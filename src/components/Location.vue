@@ -27,6 +27,13 @@ export default {
             this.country = country
           })
       })
+    },
+    showLocation() {
+      if (this.city && this.province) {
+        return `Your location is: ${ this.city }, ${ this.province }`
+      } else {
+        return `Please press the button above to get your location`
+      }
     }
   }
 }
@@ -39,7 +46,7 @@ export default {
       <button @click="getLocation"> Click me to get location </button>
     </h3>
     <div>
-      Your location is: {{ city }}, {{ province }}
+      {{showLocation()}}
     </div>
   </div>
 </template>

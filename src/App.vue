@@ -5,8 +5,8 @@ import LocationSearch from './components/LocationSearch.vue'
 
 <template>
   <main>
-    <!-- <Location /> -->
-    <!-- <LocationSearch /> -->
+    <Location />
+    <LocationSearch />
   </main>
 </template>
 
