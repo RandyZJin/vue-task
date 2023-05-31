@@ -94,7 +94,7 @@ export default {
   
       <form @submit.prevent="submit">
         <input v-model="location" placeholder="put a location here" />
-        <button type="submit">Search</button>
+        <button type="submit">Search For Location</button>
       </form>
       <img :src="currentMap" alt="Map">
     </div>
