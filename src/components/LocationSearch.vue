@@ -79,7 +79,12 @@ export default {
 
     getLocalTime(timezone) {
       const today = new Date()
-      const localTime = today.getHours() + 4 + Number(timezone.split(":")[0]) + ":"
+      let localTime;
+      if (today.getHours() + 4 + Number(timezone.split(":")[0]) > 24) {
+        localTime = today.getHours() + 4 + Number(timezone.split(":")[0]) - 24 + ":"
+      } else {
+        localTime = today.getHours() + 4 + Number(timezone.split(":")[0]) + ":"
+      }
       // adding +4 as it is GMT -4 right now for EDT
       if (today.getMinutes() < 10) {
         return localTime + 0 + today.getMinutes()
