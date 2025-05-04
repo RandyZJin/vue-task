@@ -189,6 +189,7 @@ export default {
 th {
   overflow-y: auto;
   border: 1px solid black;
+  color: cornflowerblue;
 }
 
 #pagination-container {
